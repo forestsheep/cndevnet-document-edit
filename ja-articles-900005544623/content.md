@@ -210,13 +210,13 @@ kintoneHeaderSpace.appendChild(button);</pre>
     ClassName、ID 的指定
 </h3>
 <p>
-    各组件的 ClassName 和 ID 都可以分别指定。<br>通过对各个组件分别设置 CSS，以达到微调效果。
+    各组件的 ClassName 和 ID 都可以分别指定。<br>通过对各个件分别设置 CSS，以达到微调效果。
 </p>
 <h3>
     无障碍
 </h3>
 <p>
-    我们对应了键盘操作，语音等无障碍访问功能。<br>由于各 OS 的设置方法不尽相同，您可以根据自身使用的 OS 进行确认。
+    我们对应了键盘操作，语音等无障碍访问功能。<br>由于各 OS 的设置方法不尽相同，您可以根据所使用的 OS 进行确认。
 </p>
 <h2>
     注意事项
@@ -224,12 +224,12 @@ kintoneHeaderSpace.appendChild(button);</pre>
 <ul class=" list-paddingleft-2">
     <li>
         <p>
-            v1 は JavaScript 版のみの提供です。React 版はありません。
+            v1 只提供 JavaScript 版。没有 React 版。
         </p>
     </li>
     <li>
         <p>
-            IE11 では正常に動作しないためご留意ください。<br>詳しくは<a href="https://kintone-ui-component.netlify.app/docs/getting-started/quick-start#%E3%83%96%E3%83%A9%E3%82%A6%E3%82%B6%E5%AF%BE%E5%BF%9C%E7%8A%B6%E6%B3%81">ブラウザ対応状況</a>をご確認ください。
+            在IE11下不能正常运作，请注意。<br>详情见<a href="https://kintone-ui-component.netlify.app/docs/getting-started/quick-start#%E3%83%96%E3%83%A9%E3%82%A6%E3%82%B6%E5%AF%BE%E5%BF%9C%E7%8A%B6%E6%B3%81">浏览器对应状况</a>。
         </p>
     </li>
 </ul>
@@ -237,7 +237,7 @@ kintoneHeaderSpace.appendChild(button);</pre>
     更新履歴
 </h2>
 <p>
-    今後の対応コンポーネントの追加など、機能の更新履歴や最新情報は下記の開発元のページをご確認ください。
+    今后有组件的追加或是功能的更新，下面的开发商的链接中有最新情报，可以随时确认。
 </p>
 <ul class=" list-paddingleft-2">
     <li>
@@ -247,19 +247,16 @@ kintoneHeaderSpace.appendChild(button);</pre>
     </li>
     <li>
         <p>
-            リリースノート:&nbsp;<a href="https://kintone-ui-component.netlify.app/blog">https://kintone-ui-component.netlify.app/blog</a>
+            发行说明:&nbsp;<a href="https://kintone-ui-component.netlify.app/blog">https://kintone-ui-component.netlify.app/blog</a>（日文）
         </p>
     </li>
 </ul>
 <h2>
-    おわりに
+    结束语
 </h2>
 <p>
-    kintone UI Component を使うと、自作では時間のかかるカスタマイズも簡単に行うことができます。<br>「kintone で使われているボタンやドロップダウンパーツを再現したいけど自作するのは大変だな」と感じている方にも、<br>より効率的に開発を行いたいと感じている方にも、是非ご利用いただければと思います。
+    使用kintone UI Component，可以让费时费力的自定义开发成为一件简单的事情。<br>「自己来制作 kintone 风的按钮或下拉框之类的组件会很麻烦吧」。对有这种感叹的<br>或是想获得更高效率的开发人士，非常推荐使用本软件。
 </p>
-<p>
+<p class="operaCheck">
     このTipsは、2021年1月版 kintone および kintone UI Component v1.0.0 で確認したものになります。
-</p>
-<p>
-    <br>
 </p>
