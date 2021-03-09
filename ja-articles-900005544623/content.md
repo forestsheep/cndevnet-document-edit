@@ -67,7 +67,7 @@
     请参考文档网站&nbsp;<a href="https://kintone-ui-component.netlify.app/docs/getting-started/quick-start">Quick Start</a>（日文）
 </p>
 <p class="operaCheck">
-    &nbsp;v0 的使用方法请参考&nbsp;<a href="https://cybozudev.kf5.com/hc/kb/article/1228393/">使用“kintone UI Component​”轻松创建kintone风格的UI组件</a>。<br>另外如果您正在考虑升级新版本的话，可以参考&nbsp;<a href="https://kintone-ui-component.netlify.app/docs/guides/comparison-v0-v1">v0 和 v1 写法上的区别</a>。
+    &nbsp;v0 的使用方法请参考&nbsp;<a href="https://cybozudev.kf5.com/hc/kb/article/1228393/">使用“kintone UI Component​”轻松创建kintone风格的UI组件</a>。<br>另外如果您正在考虑升级新版本的话，可以参考&nbsp;<a href="https://kintone-ui-component.netlify.app/docs/guides/comparison-v0-v1">v0 和 v1 写法上的区别</a>（日文）。
 </p>
 <h2>
     特征
@@ -153,13 +153,13 @@ return event;
     <thead>
         <tr class="firstRow">
             <td>
-                パーツ
+                组件
             </td>
             <td>
                 kintone UI Component
             </td>
             <td>
-                標準パーツ
+                标准组件
             </td>
         </tr>
     </thead>
@@ -258,5 +258,5 @@ kintoneHeaderSpace.appendChild(button);</pre>
     使用kintone UI Component，可以让费时费力的自定义开发成为一件简单的事情。<br>「自己来制作 kintone 风的按钮或下拉框之类的组件会很麻烦吧」。对有这种感叹的<br>或是想获得更高效率的开发人士，非常推荐使用本软件。
 </p>
 <p class="operaCheck">
-    このTipsは、2021年1月版 kintone および kintone UI Component v1.0.0 で確認したものになります。
+    此Tips在2021年1月版的 kintone 和 kintone UI Component v1.0.0 中确认过。
 </p>
