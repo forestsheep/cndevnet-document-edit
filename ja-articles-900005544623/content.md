@@ -5,7 +5,7 @@
     kintone UI Component是什么
 </h2>
 <p>
-    kintone UI Component是类kintone UI风的组件的集成库。<br>可以利用在 kintone 自定义或插件的UI组件开发上。<br>本文中讲介绍 kintone UI Component v1 的功能。<br>在 v1 中，提供了桌面电脑版和手机版。<br>所支持的组件在文档网站&nbsp;<a href="https://kintone-ui-component.netlify.app/docs/components/desktop/button">Components</a>（日文）&nbsp;中可供查看。
+    kintone UI Component是类kintone UI风的组件的集成库。<br>可以利用在 kintone 自定义或插件的UI组件开发上。<br>本文中讲介绍 kintone UI Component v1 的功能。<br>在 v1 中，提供了电脑版和手机版。<br>所支持的组件在文档网站&nbsp;<a href="https://kintone-ui-component.netlify.app/docs/components/desktop/button">Components</a>（日文）&nbsp;中可供查看。
 </p>
 <h3>
     Github
@@ -67,23 +67,23 @@
     请参考文档网站&nbsp;<a href="https://kintone-ui-component.netlify.app/docs/getting-started/quick-start">Quick Start</a>（日文）
 </p>
 <p class="operaCheck">
-    &nbsp;v0 的使用方法请参考&nbsp;<a href="https://cybozudev.kf5.com/hc/kb/article/1228393/">使用“kintone UI Component​”轻松创建kintone风格的UI组件</a><br>另外如果您正在考虑升级新版本的话，可以参考&nbsp;<a href="https://kintone-ui-component.netlify.app/docs/guides/comparison-v0-v1">v0 和 v1 写法上的区别</a>
+    &nbsp;v0 的使用方法请参考&nbsp;<a href="https://cybozudev.kf5.com/hc/kb/article/1228393/">使用“kintone UI Component​”轻松创建kintone风格的UI组件</a>。<br>另外如果您正在考虑升级新版本的话，可以参考&nbsp;<a href="https://kintone-ui-component.netlify.app/docs/guides/comparison-v0-v1">v0 和 v1 写法上的区别</a>。
 </p>
 <h2>
-    特徴
+    特征
 </h2>
 <h3>
-    デスクトップ版、モバイル版それぞれに対応した UI パーツ
+    电脑版和手机版各自对应的 UI 组件
 </h3>
 <p>
-    デスクトップ版だけでなくモバイル版にも対応した UI パーツが実装されています。<br>ここでは、Button と MobileCheckbox をご紹介します。
+    不仅仅是电脑版，我们也开发了手机版的 UI 组件<br>在这里，我们来对Button 和 MobileCheckbox 来做一些介绍。
 </p>
 <h4>
     Button
 </h4>
 <pre class="brush:js;toolbar:false">(function() {    
 &#39;use strict&#39;;    
-// レコード詳細画面    
+// 记录详细画面    
 kintone.events.on(&#39;app.record.index.show&#39;, function(event) {    
 var header = kintone.app.getHeaderMenuSpaceElement();    
 var button = new Kuc.Button({    
@@ -104,9 +104,7 @@ return event;
 <p>
     <br><img src="https://developer.cybozu.io/hc/article_attachments/900006426766/KUCv1_button.png" alt="KUCv1_button.png" width="472" height="255" title="" style="border-width: 1px; border-style: solid; border-color: rgb(221, 221, 221); max-width: 800px; vertical-align: middle; height: auto; color: rgb(74, 74, 74); font-family: helvetica, arial, &quot;hiragino kaku gothic pro&quot;, meiryo, &quot;ms pgothic&quot;, sans-serif; font-size: 15.4px; background-color: rgb(250, 250, 250);"/>&nbsp;
 </p>
-<p>
-    <br>
-</p>
+<br>
 <h4>
     MobileCheckbox
 </h4>
@@ -146,10 +144,10 @@ return event;
     <br>
 </p>
 <h3>
-    kintone パーツの再現度の向上
+    kintone 组件的相似度的提高
 </h3>
 <p>
-    各コンポーネントは kintone 標準パーツの UI や挙動を忠実に再現しています。<br>ここでは、コンポーネントと標準パーツをキャプチャで比較します。
+    各组件忠实地再现了 kintone 标准组件的 UI 和动作<br>在这里，我们截图比较一下 v1 组件和标准组件.
 </p>
 <table>
     <thead>
@@ -191,16 +189,16 @@ return event;
     </tbody>
 </table>
 <p>
-    必須アイコン表示/非表示の設定が行えたり、空欄時に入力例として表示されるテキストを設定できたりと、<br>標準機能で行える設定をコンポーネントでも実装できるようになり、より使いやすくなりました。
+    必须输入的图标显示与否的设置，未输入时的样例显示字符串的设置等<br>标准功能也可以实装，非常方便。
 </p>
 <h3>
-    プロパティでの宣言
+    在属性中申明
 </h3>
 <p>
-    コンポーネントに保存する値はプロパティでの宣言となっていて、JavaScript の標準関数を用いたコーディングが可能です。<br>JavaScript の書き方に近いことで、開発に携わって間もない方にも開発に慣れている方にも使いやすくなっています。
+    用属性的方式申明并保存组件的值，可以使用 JavaScript 标准函数来编写代码。<br>由于和 JavaScript 的写法类似，使得新手和老手都可以非常方便的使用。
 </p>
 <h4>
-    サンプルコード
+    示例代码
 </h4>
 <pre class="brush:js;toolbar:false">var kintoneHeaderSpace = kintone.app.getHeaderMenuSpaceElement();    
 var button = new Kuc.Button({    
@@ -209,19 +207,19 @@ text: &#39;sample&#39;
 button.text = &#39;update&#39;;    
 kintoneHeaderSpace.appendChild(button);</pre>
 <h3>
-    ClassName、ID の指定
+    ClassName、ID 的指定
 </h3>
 <p>
-    各パーツの ClassName と ID をそれぞれ指定できます。<br>設定したいパーツごとに CSS を適用したり、ID を指定したりと細かな設定もカスタマイズに反映できます。
+    各组件的 ClassName 和 ID 都可以分别指定。<br>通过对各个组件分别设置 CSS，以达到微调效果。
 </p>
 <h3>
-    アクセシビリティ対応
+    无障碍
 </h3>
 <p>
-    キー操作、読み上げ等のアクセシビリティに対応しました。<br>利用する OS ごとに設定方法が異なるため、お使いの OS をご確認して設定してください。
+    我们对应了键盘操作，语音等无障碍访问功能。<br>由于各 OS 的设置方法不尽相同，您可以根据自身使用的 OS 进行确认。
 </p>
 <h2>
-    注意事項
+    注意事项
 </h2>
 <ul class=" list-paddingleft-2">
     <li>
