@@ -105,7 +105,7 @@
     <br/>
 </p>
 <p>
-    <img src="https://files.kf5.com/attachments/download/23361/11406585/0016047362b4ef52ac03863edece64c/"/>
+    <img src="https://files.kf5.com/attachments/download/23361/11406585/0016047362b4ef52ac03863edece64c/" alt="0016047362b4ef52ac03863edece64c"/>
 </p>
 <h4>
     MobileCheckbox
@@ -146,10 +146,10 @@
     <br/>
 </p>
 <p>
-    <img src="https://files.kf5.com/attachments/download/23361/11406584/0016047362a4b7339ba21f48d93360e/"/>
+    <img src="https://files.kf5.com/attachments/download/23361/11406584/0016047362a4b7339ba21f48d93360e/" alt="0016047362a4b7339ba21f48d93360e"/>
 </p>
 <h3>
-    高相似度的 kintone 组件
+    高还原度的 kintone 组件
 </h3>
 <p>
     各组件忠实地再现了 kintone 标准组件的 UI 和动作<br/>在这里，我们截图比较一下 v1 组件和标准组件.
