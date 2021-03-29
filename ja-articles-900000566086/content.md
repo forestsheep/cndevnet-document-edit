@@ -1,47 +1,50 @@
+# 向JavaScript自定义中级开发者的目标前进（４）〜kintone REST API Client篇〜
+
 <h2>
-    はじめに
+前言
 </h2>
 <p>
-    <a href="https://developer.cybozu.io/hc/ja/articles/360040220451">目指せ！JavaScriptカスタマイズ中級者（１） 〜webpack編〜</a>では複数のアプリカスタマイズを扱うためのWebpackの導入をしていました。<br/>今回は同じWebpackの環境で、kintone REST APIを扱うのに便利なkintone REST API Clientをインストールして利用できるようにし、簡単に使い方をお伝えします。
+我们曾在<a href="https://cybozudev.kf5.com/hc/kb/article/1412604">向JavaScript自定义中级开发者的目标前进（１） 〜webpack篇〜</a>中介绍了为了自定义多个应用所如何去使用Webpack。<br>这次，我们准备向大家介绍如何同样用Webpack环境，来安装和使用kintone REST API Client来使得处理kintone REST API更为方便。
 </p>
 <h2>
-    kintone REST API Clientとは
+kintone REST API Client是什么
 </h2>
 <p>
-    レコード全件取得や、アップサート（既存のデータがあればアップデート、なければインサート）など、<br/>レコードやアプリの操作を簡単にできるようにする、kintone REST APIを使うための便利なツールです。
+获取全部记录，UPSERT（记录已存在的话更新，否则新建）等<br>通过使用kintone REST API来更简单地操作记录和应用的方便的工具。
 </p>
 <p>
-    ※もともと、同じ用途のライブラリーとして<a href="https://github.com/kintone/kintone-js-sdk">kintone JS SDK</a>というものもありますが、そちらは利用非推奨となっております。<br/>今までkintone JS SDKを使っていた方も今回紹介するkintone REST API Clientを是非利用いただければと思います。
+※本来，有着相同用途的库——<a href="https://github.com/kintone/kintone-js-sdk">kintone JS SDK</a>，但是现在不推荐使用了。<br>之前如果您一直在使用kintone JS SDK的话，<br>借这次介绍的机会，非常推荐您尝试一下kintone REST API Client。
 </p>
 <h2>
-    使うための準備
+使用前的准备
 </h2>
 <p>
-    <a href="https://developer.cybozu.io/hc/ja/articles/360040220451">目指せ！JavaScriptカスタマイズ中級者（１） 〜webpack編〜</a>で説明したようにJavaScriptファイルをbuildできるようになっているのが前提です。
+就像在<a href="https://cybozudev.kf5.com/hc/kb/article/1412604">向JavaScript自定义中级开发者的目标前进（１） 〜webpack篇〜</a>所说明的一样，让JavaScript处于可编译状态是大前提。
 </p>
 <p>
-    下記をコマンドラインから入力し実行します。
+输入下列命令并执行
 </p>
 <pre>npm install @kintone/rest-api-client</pre>
 <p>
-    これでインストールがはじまり、kintone REST API Clientが利用できるようになります。<br/>はじめて利用する方は以下の記事のQuickStartをやってみると良いでしょう。
+这样，安装完成后，kintone REST API Client就可以使用了。<br>
+如果您是初次使用，可以参考下面文章中的Quick Start章节
 </p>
 <p>
-    <a href="https://developer.cybozu.io/hc/ja/articles/900000767263-kintone-JavaScript-Client-kintone-rest-api-client-#quickstart-nodejs">kintone JavaScript Client (@kintone/rest-api-client)</a>
+<a href="https://cybozudev.kf5.com/hc/kb/article/1389642#quickstart">kintone JavaScript Client (@kintone/rest-api-client)</a>
 </p>
 <h2>
-    使い方
+    使用方法
 </h2>
 <p>
-    <a href="https://github.com/kintone/js-sdk/tree/master/packages/rest-api-client">GitHubのkintone-rest-api-client</a>のページに利用方法などが書かれていますが、英語ですのでリファレンスのどこを参照すればよいかを説明します。
+<a href="https://github.com/kintone/js-sdk/tree/master/packages/rest-api-client">GitHub的kintone-rest-api-client</a> 中记述了使用方法，因为是英语写成，这里对各个参照的使用方法一一做介绍。
 </p>
 <h3>
-    リファレンス
+    参照
 </h3>
 <ul class=" list-paddingleft-2">
     <li>
         <p>
-            <a href="https://github.com/kintone/js-sdk/blob/master/packages/rest-api-client/docs/record.md">Record</a>操作に関するリファレンス
+            <a href="https://github.com/kintone/js-sdk/blob/master/packages/rest-api-client/docs/record.md">记录</a>操作有关的参照
         </p>
     </li>
     <ul class=" list-paddingleft-2" style="list-style-type: square;">
@@ -92,7 +95,7 @@
     リファレンスの読み方
 </h3>
 <p>
-    リファレンスの各項目には、その関数の説明と、Parameters（関数の引数）とReturns（関数の返り値）があります。英語で読み取れないところはGoogle翻訳などを利用すれば理解の一助になるかと思います。<br/><br/>1. 関数名<br/>2. 関数の説明<br/>3. 関数の返り値<br/>4. 関数の引数
+    リファレンスの各項目には、その関数の説明と、Parameters（関数の引数）とReturns（関数の返り値）があります。英語で読み取れないところはGoogle翻訳などを利用すれば理解の一助になるかと思います。<br><br>1. 関数名<br>2. 関数の説明<br>3. 関数の返り値<br>4. 関数の引数
 </p>
 <h2>
     <img src="https://developer.cybozu.io/hc/article_attachments/900003563006/js-sdk_record_md_at_master___kintone_js-sdk.png" alt="js-sdk_record_md_at_master___kintone_js-sdk.png" title="" style="box-sizing: border-box; border-width: 1px; border-style: solid; border-color: rgb(221, 221, 221); max-width: 800px; vertical-align: middle; cursor: pointer; height: auto;"/>
@@ -138,13 +141,13 @@
 </p>
 <pre class="brush:js;toolbar:false">const res = await client.record.updateRecord({app: &quot;1&quot;, id: &quot;10&quot;, record: {field_code_1: {value: &quot;サンプルテキスト2&quot;}}});</pre>
 <p>
-    <span style="font-size: 18px; font-weight: 700;">レコードを一括アップデート</span><br/>
+    <span style="font-size: 18px; font-weight: 700;">レコードを一括アップデート</span><br>
 </p>
 <p>
     下記のように3レコードを一括で更新したい場合
 </p>
 <p>
-    アプリIDが1, レコードIDが10, フィールドコードがfield_code_1に&quot;サンプルテキスト1&quot;<br/>アプリIDが1, レコードIDが11, フィールドコードがfield_code_1に&quot;サンプルテキスト2&quot;<br/>アプリIDが1, レコードIDが12, フィールドコードがfield_code_1に&quot;サンプルテキスト3&quot;
+    アプリIDが1, レコードIDが10, フィールドコードがfield_code_1に&quot;サンプルテキスト1&quot;<br>アプリIDが1, レコードIDが11, フィールドコードがfield_code_1に&quot;サンプルテキスト2&quot;<br>アプリIDが1, レコードIDが12, フィールドコードがfield_code_1に&quot;サンプルテキスト3&quot;
 </p>
 <pre class="brush:js;toolbar:false">const res = await client.record.updateAllRecords({
   app: 1,
@@ -198,7 +201,7 @@
     保存時のイメージ
 </h3>
 <p>
-    保存時に、数量分の、在庫数がなければ保存させない。在庫がある場合は、在庫引当処理を行う（商品リストアプリの在庫数をへらす）<br/>※「在庫数」フィールドは今回のサンプルで追加します。
+    保存時に、数量分の、在庫数がなければ保存させない。在庫がある場合は、在庫引当処理を行う（商品リストアプリの在庫数をへらす）<br>※「在庫数」フィールドは今回のサンプルで追加します。
 </p>
 <p>
     <img src="https://developer.cybozu.io/hc/article_attachments/900003502703/mceclip0.png" alt="mceclip0.png" title="" style="box-sizing: border-box; border-width: 1px; border-style: solid; border-color: rgb(221, 221, 221); max-width: 800px; vertical-align: middle; cursor: pointer; height: auto;"/>
@@ -209,12 +212,12 @@
 <ol class=" list-paddingleft-2">
     <li>
         <p>
-            &nbsp;アプリの用意<br/>kintoneアプリストアにある「商品見積書パック」を選び「このアプリパックを追加」を押して追加してください。<img src="https://developer.cybozu.io/hc/article_attachments/900003118726/mceclip0.png" alt="mceclip0.png" title="" style="box-sizing: border-box; border-width: 1px; border-style: solid; border-color: rgb(221, 221, 221); max-width: 800px; vertical-align: middle; cursor: pointer; height: auto; font-family: -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Helvetica, Arial, sans-serif;"/>
+            &nbsp;アプリの用意<br>kintoneアプリストアにある「商品見積書パック」を選び「このアプリパックを追加」を押して追加してください。<img src="https://developer.cybozu.io/hc/article_attachments/900003118726/mceclip0.png" alt="mceclip0.png" title="" style="box-sizing: border-box; border-width: 1px; border-style: solid; border-color: rgb(221, 221, 221); max-width: 800px; vertical-align: middle; cursor: pointer; height: auto; font-family: -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Helvetica, Arial, sans-serif;"/>
         </p>
     </li>
     <li>
         <p>
-            アプリの設定<br/>商品リストアプリに、フィールド名とフィールドコードが「在庫数」のフィールドを追加してください。また、見積書アプリからルックアップするためのレコードを1つ以上登録してください。
+            アプリの設定<br>商品リストアプリに、フィールド名とフィールドコードが「在庫数」のフィールドを追加してください。また、見積書アプリからルックアップするためのレコードを1つ以上登録してください。
         </p>
     </li>
 </ol>
@@ -222,7 +225,7 @@
     JavaScriptカスタマイズ
 </h3>
 <p>
-    コードを書き、ビルドしたものを見積書アプリにアップロードしてください。<br/>コードは、以下のリポジトリにも公開しています。<br/><a href="https://github.com/cybozudevnet/sample-kintone-webpack-for-intermediate/tree/master/src/apps/quote">https://github.com/cybozudevnet/sample-kintone-webpack-for-intermediate/tree/master/src/apps/quote</a>
+    コードを書き、ビルドしたものを見積書アプリにアップロードしてください。<br>コードは、以下のリポジトリにも公開しています。<br><a href="https://github.com/cybozudevnet/sample-kintone-webpack-for-intermediate/tree/master/src/apps/quote">https://github.com/cybozudevnet/sample-kintone-webpack-for-intermediate/tree/master/src/apps/quote</a>
 </p>
 <p>
     &nbsp;ビルドやアップロード方法については<a href="https://developer.cybozu.io/hc/ja/articles/900001933483-%E7%9B%AE%E6%8C%87%E3%81%9B-JavaScript%E3%82%AB%E3%82%B9%E3%82%BF%E3%83%9E%E3%82%A4%E3%82%BA%E4%B8%AD%E7%B4%9A%E8%80%85-%EF%BC%93-%E8%87%AA%E5%8B%95%E3%81%A7%E4%B8%80%E6%8B%AC%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E3%82%A2%E3%83%83%E3%83%97%E3%83%AD%E3%83%BC%E3%83%89%E7%B7%A8-">目指せ！JavaScriptカスタマイズ中級者（３） 〜自動で一括ファイルアップロード編〜</a>などの記事を参照ください。
@@ -231,7 +234,7 @@
     4行目のアプリIDについては、環境に合わせて書き換えてください。
 </p>
 <p>
-    <br/>
+    <br>
 </p>
 <pre class="brush:js;toolbar:false">import {KintoneRestAPIClient} from &#39;@kintone/rest-api-client&#39;;
 // 商品リストのアプリIDを入力してください
@@ -325,5 +328,5 @@ kintone.events.on(events, async (event) =&gt; {
     kintoneのJavaScript APIをそのまま使いつづけてももちろん問題ないですが、kintone REST API Clientを使うとより簡単にRESTでデータを扱えるようになるので、ぜひ利用してみてください。
 </p>
 <p>
-    <br/>
+    <br>
 </p>
