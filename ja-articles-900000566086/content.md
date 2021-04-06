@@ -36,150 +36,153 @@ kintone REST API Client是什么
     使用方法
 </h2>
 <p>
-<a href="https://github.com/kintone/js-sdk/tree/master/packages/rest-api-client">GitHub的kintone-rest-api-client</a> 中记述了使用方法，因为是英语写成，这里对各个参照的使用方法一一做介绍。
+<a href="https://github.com/kintone/js-sdk/tree/master/packages/rest-api-client">GitHub的kintone-rest-api-client</a> 中记述了使用方法，因为是英语写成，这里对各个文档的使用方法一一做介绍。
 </p>
 <h3>
-    参照
+    文档
 </h3>
 <ul class=" list-paddingleft-2">
     <li>
         <p>
-            <a href="https://github.com/kintone/js-sdk/blob/master/packages/rest-api-client/docs/record.md">记录</a>操作有关的参照
+            <a href="https://github.com/kintone/js-sdk/blob/master/packages/rest-api-client/docs/record.md">记录</a>的操作
         </p>
     </li>
     <ul class=" list-paddingleft-2" style="list-style-type: square;">
         <li>
             <p>
-                ここではレコードの取得や作成などレコードの操作に関することが記載されています。通常、このリファレンスが基本になると思います。
+                这里记载着记录得获取或新建等操作内容。通常来说，这些文档是最基础的。
             </p>
         </li>
     </ul>
     <li>
         <p>
-            <a href="https://github.com/kintone/js-sdk/blob/master/packages/rest-api-client/docs/app.md">App</a>操作に関するリファレンス
+            <a href="https://github.com/kintone/js-sdk/blob/master/packages/rest-api-client/docs/app.md">应用</a>的操作
         </p>
     </li>
     <ul class=" list-paddingleft-2" style="list-style-type: square;">
         <li>
             <p>
-                アプリの設定変更操作に関することが記載されています。アプリの設定を自動で変更したいなどがあれば使いますが、見る頻度は基本的に低いはずです。
+                这里记载着有关应用设置变更的内容。如果是想变更应用的设置，可以看这里，但基本上使用频度较低。
             </p>
         </li>
     </ul>
     <li>
         <p>
-            <a href="https://github.com/kintone/js-sdk/blob/master/packages/rest-api-client/docs/file.md">File</a>操作に関するリファレンス
+            <a href="https://github.com/kintone/js-sdk/blob/master/packages/rest-api-client/docs/file.md">文件</a>的操作
         </p>
     </li>
     <ul class=" list-paddingleft-2" style="list-style-type: square;">
         <li>
             <p>
-                ファイルのアップロード、ダウンロードに関することが記載されています。レコードにファイルを添付したい場合などもこちらを利用することになります。
+                这里记载着文件的上传，下载等有关操作的内容。向记录中添加文件时做如下操作请参考这里。
             </p>
         </li>
     </ul>
     <li>
         <p>
-            <a href="https://github.com/kintone/js-sdk/blob/master/packages/rest-api-client/docs/bulkRequest.md">BulkRequest</a>に関するリファレンス
+            <a href="https://github.com/kintone/js-sdk/blob/master/packages/rest-api-client/docs/bulkRequest.md">BulkRequest</a>的操作
         </p>
     </li>
     <ul class=" list-paddingleft-2" style="list-style-type: square;">
         <li>
             <p>
-                複数アプリへのレコード一括処理に関することが記載されています。
+                这里记载着复数个应用的记录批量操作的内容。
             </p>
         </li>
     </ul>
 </ul>
 <h3>
-    リファレンスの読み方
+    文档的阅读方法
 </h3>
 <p>
-    リファレンスの各項目には、その関数の説明と、Parameters（関数の引数）とReturns（関数の返り値）があります。英語で読み取れないところはGoogle翻訳などを利用すれば理解の一助になるかと思います。<br><br>1. 関数名<br>2. 関数の説明<br>3. 関数の返り値<br>4. 関数の引数
+    文档中有各个项目的函数说明、参数和返回值等说明。英语中不能理解的部分，请用翻译网站等可以帮助理解。<br><br>1. 函数名<br>2. 函数的说明<br>3. 函数的返回值<br>4. 函数的参数
 </p>
 <h2>
     <img src="https://developer.cybozu.io/hc/article_attachments/900003563006/js-sdk_record_md_at_master___kintone_js-sdk.png" alt="js-sdk_record_md_at_master___kintone_js-sdk.png" title="" style="box-sizing: border-box; border-width: 1px; border-style: solid; border-color: rgb(221, 221, 221); max-width: 800px; vertical-align: middle; cursor: pointer; height: auto;"/>
 </h2>
 <h2>
-    使用例
+    使用的例子
 </h2>
 <p>
-    リファレンスに記載されているものから一部、使用例を下記にしめします。async/await形式で記述します。参考にしてください。
+    下面使用文档中所记载的中一部分作为例子来说明。我们使用async/await的形式来表述。谨供参考。
 </p>
 <h3>
-    レコードを取得
+    记录的获取
 </h3>
 <p>
-    アプリIDが1, レコード番号が10のレコードを取得したい場合
+    获取应用的ID为1，记录号为10的记录时做如下操作
 </p>
 <pre class="brush:js;toolbar:false">const res = await client.record.getRecord({app: &quot;1&quot;, id: &quot;10&quot;});</pre>
 <h3>
-    レコードを一括取得
+    记录的批量获取
 </h3>
 <p>
-    2020年7月定期メンテナンスで、それ以降に作られるアプリはoffset上限が1万件となってしまったため、レコードを全件取得する場合は<a href="https://developer.cybozu.io/hc/ja/articles/360028843531-%E3%82%AB%E3%83%BC%E3%82%BD%E3%83%AB-API-%E3%82%92%E4%BD%BF%E3%81%A3%E3%81%A6%E3%83%AC%E3%82%B3%E3%83%BC%E3%83%89%E3%82%92%E4%B8%80%E6%8B%AC%E5%8F%96%E5%BE%97%E3%81%99%E3%82%8B">カーソル API</a>を使う必要があります。
+    2020年7月的定期维护中，之后所制作的应用offset的上限为1万件，所以如果想全部获取的话，就有必要使用<a href="https://cybozudev.kf5.com/hc/kb/article/1409214">游标 API</a>
 </p>
 <p>
-    ですが、kintone REST API Clientではカーソル APIを意識せずとも下記のように全件取得できます。
+    但是，在kintone REST API Client中不必特别在意游标 API的使用，而可以像下面那样一下子获取全部记录。
 </p>
 <p>
-    アプリIDが1, フィールドコードがprice, priceが1000以上のものを取得したい場合
+    获取应用的ID为1, 字段代码为price, price为1000以上的记录时做如下操作
 </p>
 <pre class="brush:js;toolbar:false">const res = await client.record.getAllRecords({app: &quot;1&quot;, condition: &quot;price &gt;= 1000&quot;});</pre>
 <p>
-    <span style="font-size: 18px; font-weight: 700;">レコード作成</span>
+    <span style="font-size: 18px; font-weight: 700;">新建记录</span>
 </p>
 <p>
-    アプリIDが1, フィールドコードがfield_code_1に&quot;サンプルテキスト&quot;と入力されたレコードを作成したい場合
+    应用ID为1, 字段代码为field_code_1里填入&quot;示例文本1&quot;的记录作成时做如下操作
 </p>
-<pre class="brush:js;toolbar:false">const res = await client.record.addRecord({app: &quot;1&quot;, record: {field_code_1: {value: &quot;サンプルテキスト1&quot; }}});</pre>
+<pre class="brush:js;toolbar:false">const res = await client.record.addRecord({app: &quot;1&quot;, record: {field_code_1: {value: &quot;示例文本1&quot; }}});</pre>
 <p>
-    <span style="font-size: 18px; font-weight: 700;">レコードをアップデート</span>
-</p>
-<p>
-    アプリIDが1, レコードIDが10, フィールドコードがfield_code_1に&quot;サンプルテキスト2&quot;と入力された状態にレコードを更新したい場合
-</p>
-<pre class="brush:js;toolbar:false">const res = await client.record.updateRecord({app: &quot;1&quot;, id: &quot;10&quot;, record: {field_code_1: {value: &quot;サンプルテキスト2&quot;}}});</pre>
-<p>
-    <span style="font-size: 18px; font-weight: 700;">レコードを一括アップデート</span><br>
+    <span style="font-size: 18px; font-weight: 700;">更新记录</span>
 </p>
 <p>
-    下記のように3レコードを一括で更新したい場合
+    应用ID为1, 记录ID为10, 字段代码为field_code_1里填入&quot;示例文本2&quot;后更新记录时做如下操作
+</p>
+<pre class="brush:js;toolbar:false">const res = await client.record.updateRecord({app: &quot;1&quot;, id: &quot;10&quot;, record: {field_code_1: {value: &quot;示例文本2&quot;}}});</pre>
+<p>
+    <span style="font-size: 18px; font-weight: 700;">批量更新记录</span><br>
 </p>
 <p>
-    アプリIDが1, レコードIDが10, フィールドコードがfield_code_1に&quot;サンプルテキスト1&quot;<br>アプリIDが1, レコードIDが11, フィールドコードがfield_code_1に&quot;サンプルテキスト2&quot;<br>アプリIDが1, レコードIDが12, フィールドコードがfield_code_1に&quot;サンプルテキスト3&quot;
+    批量更新下面的三条记录<br>
+    &nbsp;&nbsp;应用ID为1, 记录ID为10, 字段代码为field_code_1里填入&quot;示例文本1&quot;<br>
+    &nbsp;&nbsp;应用ID为1, 记录ID为11, 字段代码为field_code_1里填入&quot;示例文本2&quot;<br>
+    &nbsp;&nbsp;应用ID为1, 记录ID为12, 字段代码为field_code_1里填入&quot;示例文本3&quot;<br>
+    时做如下操作
 </p>
 <pre class="brush:js;toolbar:false">const res = await client.record.updateAllRecords({
   app: 1,
   // レコードは、オブジェクトの配列で指定します。
   records: [
-    {id: &#39;11&#39;, record: {field_code_1: {value: &#39;サンプルテキスト1&#39;}}},
-    {id: &#39;12&#39;, record: {field_code_2: {value: &#39;サンプルテキスト2&#39;}}},
-    {id: &#39;13&#39;, record: {field_code_3: {value: &#39;サンプルテキスト3&#39;}}},
+    {id: &#39;10&#39;, record: {field_code_1: {value: &#39;示例文本1&#39;}}},
+    {id: &#39;11&#39;, record: {field_code_1: {value: &#39;示例文本2&#39;}}},
+    {id: &#39;12&#39;, record: {field_code_1: {value: &#39;示例文本3&#39;}}},
   ]
 });</pre>
 <p>
-    <span style="font-size: 18px; font-weight: 700;">レコードをアップサート</span>
+    <span style="font-size: 18px; font-weight: 700;">增补记录</span>
 </p>
 <p>
-    アップサートとは、該当するレコードがなければインサート（挿入・新規作成）、該当するレコードがあればアップデート（更新）をするための機能です。
+    所谓增补，就是指当该记录不存在时新建一条记录，该记录存在时则更新该记录的操作。
 </p>
 <p>
-    アプリIDが1, 更新のキーに利用するフィールドコードが&quot;field_key&quot;, field_keyの値が&quot;apple&quot;, 更新するフィールドコードがfield_code_1で更新内容が&quot;サンプルテキスト1&quot;の場合
+    应用ID为1, 更新字段代码为&quot;field_key&quot;, field_key的值为&quot;apple&quot;的记录, 把字段代码为field_code_1中填入&quot;示例文本1&quot;时做如下操作
 </p>
 <pre class="brush:js;toolbar:false">const res = await client.record.upsertRecord({
-  app: &quot;1&quot;, updateKey: {field: &quot;field_key&quot;, value: &quot;apple&quot; }, record: {field_code_1: {value: &quot;サンプルテキスト1&quot;}}
+  app: &quot;1&quot;, updateKey: {field: &quot;field_key&quot;, value: &quot;apple&quot; }, record: {field_code_1: {value: &quot;示例文本1&quot;}}
 });</pre>
 <h2>
-    サンプル
+    范例
 </h2>
 <p>
-    アプリ間のデータのやり取りでkintone REST API Clientを中心に使ったサンプルを示します。
+    下面展示使用kintone REST API Client来实现应用之间的数据的取用的范例。
 </p>
 <h3>
-    シナリオ
+    剧本
 </h3>
 <p>
+    准备两个应用。一个是商品列表。另一个是报价单。
+    制作报价单，选取商品列表中的商品，然后根据单价和数量计算其总价。
     kintoneアプリストアに、見積書アプリと商品リストアプリの2つのアプリがパックになっている「商品見積書パック」というものがあります。見積書アプリで見積作成時に、ルックアップフィールドを用いて商品リストアプリにある商品を選べるものです。
 </p>
 <p>
