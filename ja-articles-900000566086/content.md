@@ -145,18 +145,18 @@ kintone REST API Client是什么
 </p>
 <p>
     批量更新下面的三条记录<br>
-    &nbsp;&nbsp;应用ID为1, 记录ID为10, 字段代码为field_code_1里填入&quot;示例文本1&quot;<br>
-    &nbsp;&nbsp;应用ID为1, 记录ID为11, 字段代码为field_code_1里填入&quot;示例文本2&quot;<br>
-    &nbsp;&nbsp;应用ID为1, 记录ID为12, 字段代码为field_code_1里填入&quot;示例文本3&quot;<br>
+    &nbsp;&nbsp;应用ID为1, 记录ID为11, 字段代码为field_code_1里填入&quot;示例文本1&quot;<br>
+    &nbsp;&nbsp;应用ID为1, 记录ID为12, 字段代码为field_code_2里填入&quot;示例文本2&quot;<br>
+    &nbsp;&nbsp;应用ID为1, 记录ID为13, 字段代码为field_code_3里填入&quot;示例文本3&quot;<br>
     时做如下操作
 </p>
 <pre class="brush:js;toolbar:false">const res = await client.record.updateAllRecords({
   app: 1,
   // レコードは、オブジェクトの配列で指定します。
   records: [
-    {id: &#39;10&#39;, record: {field_code_1: {value: &#39;示例文本1&#39;}}},
-    {id: &#39;11&#39;, record: {field_code_1: {value: &#39;示例文本2&#39;}}},
-    {id: &#39;12&#39;, record: {field_code_1: {value: &#39;示例文本3&#39;}}},
+    {id: &#39;11&#39;, record: {field_code_1: {value: &#39;示例文本1&#39;}}},
+    {id: &#39;12&#39;, record: {field_code_2: {value: &#39;示例文本2&#39;}}},
+    {id: &#39;13&#39;, record: {field_code_3: {value: &#39;示例文本3&#39;}}},
   ]
 });</pre>
 <p>
@@ -182,56 +182,53 @@ kintone REST API Client是什么
 </h3>
 <p>
     准备两个应用。一个是商品列表。另一个是报价单。
-    制作报价单，选取商品列表中的商品，然后根据单价和数量计算其总价。
-    kintoneアプリストアに、見積書アプリと商品リストアプリの2つのアプリがパックになっている「商品見積書パック」というものがあります。見積書アプリで見積作成時に、ルックアップフィールドを用いて商品リストアプリにある商品を選べるものです。
+    制作报价单时，用Lookup组件来选取商品列表中的商品。
 </p>
 <p>
-    それを利用して、下記の仕様を満たすようアプリのカスタマイズとJavaScriptカスタマイズを行います。
+    然后，制作一个符合下列要求的自定义JavaScript。
 </p>
 <ol class=" list-paddingleft-2">
     <li>
         <p>
-            見積作成時（見積アプリでレコード保存時）に、選択されている商品の在庫数を減らす。
+            制作报价单时（保存时），选择商品的数量会使得商品得在库数量减少。
         </p>
     </li>
     <li>
         <p>
-            見積作成時（見積アプリでレコード保存時）に、選択されている商品の在庫がない場合はエラーを表示する
+            制作报价单时（保存时），选择商品的数量大于在库数量时会保错。
         </p>
     </li>
 </ol>
 <h3>
-    保存時のイメージ
+    保存时的样子
 </h3>
 <p>
-    保存時に、数量分の、在庫数がなければ保存させない。在庫がある場合は、在庫引当処理を行う（商品リストアプリの在庫数をへらす）<br>※「在庫数」フィールドは今回のサンプルで追加します。
+
+    保存时，所选数量大于在库数不能保存。在库数足够时减去相应数量。
 </p>
 <p>
     <img src="https://developer.cybozu.io/hc/article_attachments/900003502703/mceclip0.png" alt="mceclip0.png" title="" style="box-sizing: border-box; border-width: 1px; border-style: solid; border-color: rgb(221, 221, 221); max-width: 800px; vertical-align: middle; cursor: pointer; height: auto;"/>
 </p>
 <h3>
-    アプリの用意と設定
+    应用的准备
 </h3>
-<ol class=" list-paddingleft-2">
-    <li>
         <p>
+        下载模板文件，导入kintone。
+        建立两个应用，商品，报价单。
             &nbsp;アプリの用意<br>kintoneアプリストアにある「商品見積書パック」を選び「このアプリパックを追加」を押して追加してください。<img src="https://developer.cybozu.io/hc/article_attachments/900003118726/mceclip0.png" alt="mceclip0.png" title="" style="box-sizing: border-box; border-width: 1px; border-style: solid; border-color: rgb(221, 221, 221); max-width: 800px; vertical-align: middle; cursor: pointer; height: auto; font-family: -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Helvetica, Arial, sans-serif;"/>
         </p>
-    </li>
-    <li>
         <p>
-            アプリの設定<br>商品リストアプリに、フィールド名とフィールドコードが「在庫数」のフィールドを追加してください。また、見積書アプリからルックアップするためのレコードを1つ以上登録してください。
+            商品リストアプリに、フィールド名とフィールドコードが「在庫数」のフィールドを追加してください。また、見積書アプリからルックアップするためのレコードを1つ以上登録してください。
         </p>
-    </li>
 </ol>
 <h3>
-    JavaScriptカスタマイズ
+    自定义JavaScript
 </h3>
 <p>
-    コードを書き、ビルドしたものを見積書アプリにアップロードしてください。<br>コードは、以下のリポジトリにも公開しています。<br><a href="https://github.com/cybozudevnet/sample-kintone-webpack-for-intermediate/tree/master/src/apps/quote">https://github.com/cybozudevnet/sample-kintone-webpack-for-intermediate/tree/master/src/apps/quote</a>
+    写完代码，把编译好的代码上传到报价单应用中。
 </p>
 <p>
-    &nbsp;ビルドやアップロード方法については<a href="https://developer.cybozu.io/hc/ja/articles/900001933483-%E7%9B%AE%E6%8C%87%E3%81%9B-JavaScript%E3%82%AB%E3%82%B9%E3%82%BF%E3%83%9E%E3%82%A4%E3%82%BA%E4%B8%AD%E7%B4%9A%E8%80%85-%EF%BC%93-%E8%87%AA%E5%8B%95%E3%81%A7%E4%B8%80%E6%8B%AC%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E3%82%A2%E3%83%83%E3%83%97%E3%83%AD%E3%83%BC%E3%83%89%E7%B7%A8-">目指せ！JavaScriptカスタマイズ中級者（３） 〜自動で一括ファイルアップロード編〜</a>などの記事を参照ください。
+    &nbsp;编译和上传的方法<a href="https://developer.cybozu.io/hc/ja/articles/900001933483-%E7%9B%AE%E6%8C%87%E3%81%9B-JavaScript%E3%82%AB%E3%82%B9%E3%82%BF%E3%83%9E%E3%82%A4%E3%82%BA%E4%B8%AD%E7%B4%9A%E8%80%85-%EF%BC%93-%E8%87%AA%E5%8B%95%E3%81%A7%E4%B8%80%E6%8B%AC%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E3%82%A2%E3%83%83%E3%83%97%E3%83%AD%E3%83%BC%E3%83%89%E7%B7%A8-">目指せ！JavaScriptカスタマイズ中級者（３） 〜自動で一括ファイルアップロード編〜</a>などの記事を参照ください。
 </p>
 <p>
     4行目のアプリIDについては、環境に合わせて書き換えてください。
