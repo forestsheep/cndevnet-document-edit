@@ -1,6 +1,6 @@
 import { KintoneRestAPIClient } from '@kintone/rest-api-client'
 
-// 商品リストのアプリIDを入力してください
+// 商品列表的应用id
 const productsAppId = 12
 
 const events = ['app.record.create.submit', 'app.record.edit.submit']
@@ -8,20 +8,20 @@ const events = ['app.record.create.submit', 'app.record.edit.submit']
 kintone.events.on(events, async (event) => {
   const { record } = event
 
-  // kintoneへ接続するためのインスタンスを作成
+  // kintone连接的实例
   const client = new KintoneRestAPIClient()
 
-  // 今回はコード簡略化のために、テーブルの商品は重複禁止とします。
-  // ただの簡易的な重複チェックなので意味は理解しなくてOKです。
+  // 这次为了简便，表中的商品不允许重复。
+  // 只是简易的重复检查，不理解也没关系。
   const hasDuplicatedRow = record.报价明细.value.some((rowA, indexA, arr) => {
     return arr.find((rowB, indexB) => indexA !== indexB && rowA.value.型号.value === rowB.value.型号.value)
   })
   if (hasDuplicatedRow) {
-    event.error = '重複した商品は登録できません。'
+    event.error = '不允许选择重复的商品'
     return event
   }
 
-  // テーブルに入っている商品レコードを取得
+  // 获取表中的商品记录
   let products
   try {
     products = await client.record.getRecords({
@@ -29,15 +29,15 @@ kintone.events.on(events, async (event) => {
       query: `型号 in (${record.报价明细.value.map((row) => `"${row.value.型号.value}"`).join(', ')})`,
     })
   } catch (error) {
-    event.error = 'レコードの取得に失敗しました'
+    event.error = '获取记录失败'
     return event
   }
 
-  // 商品リストの在库数量を差し引いたデータを作成
+  // 在商品列表的库存中减去相应数量
   const deductedProductRecords = products.records.map((productRecord) => {
     const tableRow = record.报价明细.value.find((row) => productRecord.型号.value === row.value.型号.value)
 
-    // アップデートのキーとなる型号と, 差し引いた在库数量を格納する。
+    // 存放型号值和计算后的库存值
     return {
       型号: {
         value: productRecord.型号.value,
@@ -48,21 +48,21 @@ kintone.events.on(events, async (event) => {
     }
   })
 
-  // 在库数量を差し引いたあと在库数量が0未満になるようなレコードがないか確認
+  // 计算后的库存值是否有小于0的情况
   const noStockRecords = deductedProductRecords.filter((productRecord) => Number(productRecord.在库数量.value) < 0)
 
-  // 差し引き1未満のレコードがでた場合はエラーとみなしレコードの作成をストップさせる
+  // 存在1条以上记录时报错并跳过保存
   if (noStockRecords.length > 0) {
-    // event.errorにデータをいれたあとeventを返すとレコードの作成をストップできる
-    // どの商品が問題か示すために在庫が足りない商品の型号を列挙する
-    event.error = `在庫がない商品があります。型号 ${noStockRecords
+    // event.error中存放错误信息后返回
+    // 列出出问题的商品型号
+    event.error = `存在库存不够的商品。型号 ${noStockRecords
       .map((productRecord) => productRecord.型号.value)
       .join(', ')}`
 
     return event
   }
 
-  // 問題なければアップデート
+  // 没有问题的话更新
   try {
     await client.record.updateRecords({
       app: productsAppId,
@@ -81,7 +81,7 @@ kintone.events.on(events, async (event) => {
       }),
     })
   } catch (error) {
-    event.error = `アップデートに失敗しました。${error.message}`
+    event.error = `更新失败 ${error.message}`
     return event
   }
 
