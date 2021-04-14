@@ -1,9 +1,5 @@
-# 空间显示事件
-<h2>
-    空间首页显示后的事件
-</h2>
 <p>
-    
+    <span style="font-size:24px;font-weight:700;">空间首页显示后的事件</span><br/>
 </p>
 <ul class=" list-paddingleft-2">
     <li>
@@ -23,7 +19,7 @@
     </li>
     <li>
         <p>
-             返回了 kintone.Promise 对象后，会等待异步处理完成后开始下一步处理。
+            返回了 kintone.Promise 对象后，会等待异步处理完成后开始下一步处理。
         </p>
     </li>
 </ul>
@@ -103,9 +99,9 @@
     等待异步处理完成后执行下一步处理
 </h4>
 <p>
-    返回 kintone.Promise 对象，可以等待异步处理完成后执行 event 对象的操作。<br>
-    向同一个事件注册多个句柄，会发生错误。Thenable 对象被舍弃时，后续的句柄不能得到执行。<br>
-    具体写法请参照<a href="https://cybozudev.kf5.com/hc/kb/article/1319666">kintone的Promise基本写法</a>
+    返回 kintone.Promise 对象，可以等待异步处理完成后执行 event 对象的操作。<br/>
+ &nbsp; &nbsp;向同一个事件注册多个句柄，会发生错误。Thenable 对象被舍弃时，后续的句柄不能得到执行。<br/>
+ &nbsp; &nbsp;具体写法请参照<a href="https://cybozudev.kf5.com/hc/kb/article/1319666">kintone的Promise基本写法</a>
 </p>
 <h3>
     范例
@@ -113,12 +109,7 @@
 <p>
     空间首页显示时显示警告信息。
 </p>
-<p>
-    <br>
-</p>
-<p>
-    <pre class="brush:js;toolbar:false">kintone.events.on(&#39;space.portal.show&#39;, function(event) {
+<pre class="brush:js;toolbar:false">kintone.events.on(&#39;space.portal.show&#39;, function(event) {
   window.alert(&#39;空间首页打开了&#39;);
   return event;
-});
-</p>
+});</pre>
