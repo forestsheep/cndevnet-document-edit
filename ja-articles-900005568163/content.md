@@ -2,60 +2,57 @@
     # 向JavaScript自定义中级开发者的目标前进（5）〜TypeScript导入篇〜
 </p>
 <h2>
-    はじめに
+    前言
 </h2>
 <p>
-    今回は<a href="https://github.com/kintone/js-sdk/tree/master/packages/dts-gen#readme">@kintone/dts-gen</a>というkintoneでTypeScriptを使いやすくするツールと<a href="https://github.com/kintone/js-sdk/tree/master/packages/rest-api-client">kintone JavaScript Client (@kintone/rest-api-client)</a>を使って、実践的なTypeScriptコードを書きます。<br/>TypeScriptを使ってJavaScriptカスタマイズをする基本的な方法にについては、当サイトの別記事<a href="https://developer.cybozu.io/hc/ja/articles/360023293091-TypeScript%E3%81%A7kintone%E3%82%AB%E3%82%B9%E3%82%BF%E3%83%9E%E3%82%A4%E3%82%BA%E9%96%8B%E7%99%BA%E3%82%92%E3%81%97%E3%81%A6%E3%81%BF%E3%82%88%E3%81%86">TypeScriptでkintoneカスタマイズ開発をしてみよう</a>で紹介しています。
-</p>
-<p>
-    シリーズの記事一覧は<a href="https://developer.cybozu.io/hc/ja/articles/900005565903">こちら</a>。
+    为了更加便捷地在kintone中使用TypeScript，这次我们将演练如何使用<a href="https://github.com/kintone/js-sdk/tree/master/packages/dts-gen#readme">@kintone/dts-gen</a>和<a href="https://github.com/kintone/js-sdk/tree/master/packages/rest-api-client">kintone JavaScript Client (@kintone/rest-api-client)</a>这两个工具来编写TypeScript。<br>关于如何用TypeScript来自定义kintone的基本方法，本网站的另一篇文章<a href="https://cybozudev.kf5.com/hc/kb/article/1427187">使用TypeScript开发kintone自定义</a>中有所介绍。大家可以自行参考。
 </p>
 <h2>
-    TypeScriptとは。TypeScriptを使うメリット
+    什么是TypeScript？TypeScript的优点
 </h2>
 <p>
-    TypeScriptとは、Microsoftが開発したオープンソースのプログラミング言語で、JavaScriptに「型」情報を追加できるようになっています。
+    TypeScript是Microsoft开发的开源编程软件。使得在JavaScript中可以添加变量的类型。
 </p>
 <p>
-    「型」というのは変数などに格納される値が、数値なのか文字列なのかなど判別するために宣言します。<br/>数値型や文字列型など基本的なもの以外にも、ユーザーが独自に定義することもできます。<br/>型情報のおかげで、扱おうとしているデータの中身が実行せずともコードを書くタイミングで明らかになるため、バグを起こしにくくなります。
+    “类型”指的是为了明确变量中所赋的值，是数值，还是字符串等种类而事先声明的。<br>除了数值、字符串等基本类型以外，用户还可以声明自定义类型。<br>因为有了“类型”信息，所以即使不去读取变量中的数据，也可以在编写代码时就知道数据类型，这样可以避免很多bug的产生。
 </p>
 <p>
-    例えば、APIから取得できるkintoneの数値・計算フィールドの値は数字ではなく文字列ですが、それに直接乗算を行おうとすると、数値ではないのでエラーと判断されます。
+    例如：从kintone API中获取到的数值、计算字段的数字其实不是数值型而是字符串，直接进行乘法运算的话就会被预判为错误。
 </p>
 <ul class=" list-paddingleft-2">
     <li>
         <p>
-            数値・計算フィールドにそのまま乗算を行おうとするとエラーになる例<br/>計算フィールド「合計金額」に&nbsp; &quot;record.合計金額.value * 0.1&quot; で乗算を行おうとしてエラーが表示されています。<br/><img src="https://developer.cybozu.io/hc/article_attachments/900006342026/error1.png" alt="error1.png" title="" style="border-width:1px;border-style:solid;border-color:rgb(221,221,221);max-width:800px;vertical-align:middle;height:auto;"/>
+            对数值、计算字段直接进行乘法运报错的例子<br>计算字段的「合计金额」&nbsp; &quot;record.合计金额.value * 0.1&quot; 中的乘法运算会显示为error。<br><img/>
         </p>
     </li>
 </ul>
 <p>
-    他にも、あるオブジェクトの中に該当のキーが無い場合など、アクセスしようとするとIDEがエラーと判断します。
+    除此之外，类似对象中没有指定的key之类的也会被IDE判断为error。
 </p>
 <ul class=" list-paddingleft-2">
     <li>
         <p>
-            オブジェクトにアクセスしようとするとエラーになる例<br/>オブジェクト &quot;record.文字列.value&quot; に値を代入しようとしたが、実際には「文字列」というフィールドコードが存在しないためエラーが表示されています。<br/><img src="https://developer.cybozu.io/hc/article_attachments/900006342046/error2.png" alt="error2.png" style="border-width:1px;border-style:solid;border-color:rgb(221,221,221);max-width:800px;vertical-align:middle;height:auto;"/>
+            访问对象时error的例子。<br>给对象 &quot;record.字符串.value&quot; 赋值时，由于实际上不存在“字符串”这个字段，所以显示了error。<br><img src=""/>
         </p>
     </li>
 </ul>
 <p>
-    TypeScriptで、kintoneのアプリの各フィールドの型情報を用意し、それを利用することで上記のようにkintoneのフィールドコードを間違えたりせずに書くことができるようになります。<br/>特にテーブルの階層が深い複雑な構造や、REST API のリクエストパラメーターやレスポンスに対して大きな効果を発揮します。
+    TypeScript准备了kintone应用中各个字段的类型信息，基于这些信息，可以避免上述kintone字段代码的错误输入。<br>特别是处理表格中深层复杂的结构、REST API 的request参数、response时可以发挥明显的效果。
 </p>
 <p>
-    実際にやるとどうなるのか、サンプルを試してみましょう。
+    实际操作起来会如何呢？让我们来试一下。
 </p>
 <h2>
-    準備
+    准备
 </h2>
 <p>
-    コード:&nbsp;<a href="https://github.com/cybozudevnet/sample-kintone-webpack-for-intermediate">https://github.com/cybozudevnet/sample-kintone-webpack-for-intermediate</a>
+    代码:&nbsp;<a href="https://github.com/cybozudevnet/sample-kintone-webpack-for-intermediate">https://github.com/cybozudevnet/sample-kintone-webpack-for-intermediate</a>
 </p>
 <p>
-    git clone またはリンク先右上の緑色の Clone or download ボタンから Zip ファイルをダウンロードしてご利用ください。<br/>以降の導入方法は上記ページの Readme を参照ください。
+    请使用 git clone 或者链接右上方的绿色按钮 Clone or download 来下载 Zip 文件。<br>之后的操作方法请参考上述页面中的 Readme。
 </p>
 <p>
-    &nbsp;上記コードのURL自体は<a href="https://developer.cybozu.io/hc/ja/articles/360040220451-%E7%9B%AE%E6%8C%87%E3%81%9B-JavaScript%E3%82%AB%E3%82%B9%E3%82%BF%E3%83%9E%E3%82%A4%E3%82%BA%E4%B8%AD%E7%B4%9A%E8%80%85-%EF%BC%91-webpack%E7%B7%A8-">目指せ中級者！実践JavaScriptカスタマイズレベルアップ（１） 〜webpack編〜</a>から（４）までものと同一です。<br/>前回までの記事をお試しいただいた方も念の為再度ディレクトリ直下で npm install をやっておいてください。
+    &nbsp;上述代码的URL在<a href="https://cybozudev.kf5.com/hc/kb/article/1412604">向JavaScript自定义中级开发者的目标前进（１） 〜webpack篇〜</a>到（４）中所提到的都是同一代码。<br>在之前的文章中已经试过的用户，为以防万一，可以在目录下再次执行 npm install。
 </p>
 <p>
     細かい設定内容は後述しますが、これでTypeScriptを利用するための必要パッケージがインストールされます。
@@ -64,13 +61,13 @@
     サンプル
 </h2>
 <p>
-    第4回の記事、<a href="https://developer.cybozu.io/hc/ja/articles/900000566086">目指せ中級者！実践JavaScriptカスタマイズレベルアップ（４） 〜kintone REST API Client編〜</a>と同様のサンプルでTypeScriptならどう書くかという感じでコードを書いてみたいと思います。<br/>第4回の記事と同様のアプリを利用するので上記記事の「アプリの用意と設定」のようにアプリを用意してから以下お試しください。
+    第4回の記事、<a href="https://developer.cybozu.io/hc/ja/articles/900000566086">目指せ中級者！実践JavaScriptカスタマイズレベルアップ（４） 〜kintone REST API Client編〜</a>と同様のサンプルでTypeScriptならどう書くかという感じでコードを書いてみたいと思います。<br>第4回の記事と同様のアプリを利用するので上記記事の「アプリの用意と設定」のようにアプリを用意してから以下お試しください。
 </p>
 <h3>
     型情報の取得
 </h3>
 <p>
-    コードを実際に編集する前に、JavaScript APIにアクセスするための型定義を用意します。&nbsp;<a href="https://github.com/kintone/js-sdk/tree/master/packages/dts-gen">@kintone/dts-gen</a>&nbsp;というライブラリを使うことで、JavaScriptAPIで扱うための型定義をアプリから取得できます。<br/>下記コマンドを実行し、見積アプリから型情報を取得しておきます。作成されたものを型定義ファイルといいます。
+    コードを実際に編集する前に、JavaScript APIにアクセスするための型定義を用意します。&nbsp;<a href="https://github.com/kintone/js-sdk/tree/master/packages/dts-gen">@kintone/dts-gen</a>&nbsp;というライブラリを使うことで、JavaScriptAPIで扱うための型定義をアプリから取得できます。<br>下記コマンドを実行し、見積アプリから型情報を取得しておきます。作成されたものを型定義ファイルといいます。
 </p>
 <p>
     型定義ファイルは、サンプルにすでにはいっていますが、下記のコードを実行することでお使いの環境のアプリの定義で上書きされます。
@@ -89,7 +86,7 @@
     ファイル: src/types/Quote.d.ts
 </p>
 <p>
-    <br/>
+    <br>
 </p>
 <table>
     <tbody>
@@ -285,7 +282,7 @@
     &nbsp;Copyクリップボードにコピーしました
 </p>
 <p>
-    <br/>
+    <br>
 </p>
 <h3>
     サンプルコード
@@ -294,7 +291,7 @@
     ファイル: src/apps/quote_ts/index.ts
 </p>
 <p>
-    <br/>
+    <br>
 </p>
 <table>
     <tbody>
@@ -984,7 +981,7 @@
     &nbsp;Copyクリップボードにコピーしました
 </p>
 <p>
-    <br/>
+    <br>
 </p>
 <p>
     実際にコードを編集してみて、27行目あたりでrecordの中身をみようとするとどうなるか、Visual Studio Codeの挙動を試してみてください。
@@ -1007,31 +1004,31 @@
 <ul class=" list-paddingleft-2">
     <li>
         <p>
-            26行目: event.recordの型情報を付与<br/><img src="https://developer.cybozu.io/hc/article_attachments/900006342226/kintone-types-quote.png" alt="kintone-types-quote.png" style="border-width:1px;border-style:solid;border-color:rgb(221,221,221);max-width:800px;vertical-align:middle;height:auto;"/><br/>
+            26行目: event.recordの型情報を付与<br><img src="https://developer.cybozu.io/hc/article_attachments/900006342226/kintone-types-quote.png" alt="kintone-types-quote.png" style="border-width:1px;border-style:solid;border-color:rgb(221,221,221);max-width:800px;vertical-align:middle;height:auto;"/><br>
         </p>
         <pre>const record = event.record as kintoneTypes.Quote;</pre>
         <p>
             &nbsp;Copyクリップボードにコピーしました
         </p>
         <p>
-            とかかれた箇所ですが、これは先述の @kintone/dts-gen で作成した型定義を当てています。こうすることで、「event.record は 見積アプリのレコードですよ」ということを定義できます。<br/>これを<a href="https://typescript-jp.gitbook.io/deep-dive/type-system/type-assertion">型アサーション</a>といいます。
+            とかかれた箇所ですが、これは先述の @kintone/dts-gen で作成した型定義を当てています。こうすることで、「event.record は 見積アプリのレコードですよ」ということを定義できます。<br>これを<a href="https://typescript-jp.gitbook.io/deep-dive/type-system/type-assertion">型アサーション</a>といいます。
         </p>
     </li>
     <li>
         <p>
-            4行目〜18行目: 製品アプリの型定義（@kintone/rest-api-client用）<br/><br/>実は、<a href="https://github.com/kintone/js-sdk/tree/master/packages/rest-api-client">@kintone/rest-api-client</a>はTypeScriptをサポートしています。<br/>ただし、@kintone/rest-api-clientの型定義は、@kintone/dts-genのようにコマンドから作成することができません。<br/>そのため、このように製品アプリの型を自身で用意する必要があります。<br/>@kintone/rest-api-clientの型定義方法の詳細は<a href="https://github.com/kintone/js-sdk/blob/master/packages/rest-api-client/docs/typescript.md">こちら</a>を御覧ください。
+            4行目〜18行目: 製品アプリの型定義（@kintone/rest-api-client用）<br><br>実は、<a href="https://github.com/kintone/js-sdk/tree/master/packages/rest-api-client">@kintone/rest-api-client</a>はTypeScriptをサポートしています。<br>ただし、@kintone/rest-api-clientの型定義は、@kintone/dts-genのようにコマンドから作成することができません。<br>そのため、このように製品アプリの型を自身で用意する必要があります。<br>@kintone/rest-api-clientの型定義方法の詳細は<a href="https://github.com/kintone/js-sdk/blob/master/packages/rest-api-client/docs/typescript.md">こちら</a>を御覧ください。
         </p>
     </li>
     <li>
         <p>
-            48行目: @kintone/rest-api-clientに型情報を渡す<br/><img src="https://developer.cybozu.io/hc/article_attachments/900007244643/types-definition.png" alt="types-definition.png" style="border-width:1px;border-style:solid;border-color:rgb(221,221,221);max-width:800px;vertical-align:middle;height:auto;"/><br/>
+            48行目: @kintone/rest-api-clientに型情報を渡す<br><img src="https://developer.cybozu.io/hc/article_attachments/900007244643/types-definition.png" alt="types-definition.png" style="border-width:1px;border-style:solid;border-color:rgb(221,221,221);max-width:800px;vertical-align:middle;height:auto;"/><br>
         </p>
         <pre>products = await client.record.getRecords&lt;SavedProduct&gt;({</pre>
         <p>
             &nbsp;Copyクリップボードにコピーしました
         </p>
         <p>
-            としている行ですが、4行目~18行目で定義した製品アプリの型情報（SavedProduct）を渡すことで、getRecords()で返ってくるレコードは、SavedProduct型ですよと教えています。<br/>これにより、REST APIから返却されたレコードについてもサジェストされるようになります。
+            としている行ですが、4行目~18行目で定義した製品アプリの型情報（SavedProduct）を渡すことで、getRecords()で返ってくるレコードは、SavedProduct型ですよと教えています。<br>これにより、REST APIから返却されたレコードについてもサジェストされるようになります。
         </p>
     </li>
 </ul>
@@ -1039,7 +1036,7 @@
     サンプルコードのビルド
 </h3>
 <p>
-    ブラウザにTypeScriptを直接動作させることはできませんが、TypeScript→JavaScriptに変換できるようにWebpackの設定を追記しています。<br/>ビルドコマンドを打つことで、JavaScriptに変換できるので、それをアップロードします。
+    ブラウザにTypeScriptを直接動作させることはできませんが、TypeScript→JavaScriptに変換できるようにWebpackの設定を追記しています。<br>ビルドコマンドを打つことで、JavaScriptに変換できるので、それをアップロードします。
 </p>
 <pre>npx webpack --mode production</pre>
 <p>
@@ -1052,7 +1049,7 @@
     おわりに
 </h2>
 <p>
-    TypeScript自体と、それに対応するkintoneのエコシステムが醸成されてきた結果、このようにかなりよい開発体験を得ることができるようになってきました。<br/>kintoneを扱う上で完全には避けられない、フィールドコードの勘違いなど、大分減らせることでバグも未然に防ぐことができ、かなりTypeScriptでkintoneをカスタマイズするのは大分魅力的だと思っています。
+    TypeScript自体と、それに対応するkintoneのエコシステムが醸成されてきた結果、このようにかなりよい開発体験を得ることができるようになってきました。<br>kintoneを扱う上で完全には避けられない、フィールドコードの勘違いなど、大分減らせることでバグも未然に防ぐことができ、かなりTypeScriptでkintoneをカスタマイズするのは大分魅力的だと思っています。
 </p>
 <p>
     今回の記事でTypeScriptに興味がでたら、ぜひ入門者用の書籍などを参考にして学んでみてください。TypeScripは昨今ではかなり人気でもあり、今後の開発の役に立つと思います。
@@ -1064,5 +1061,5 @@
     このTipsは、2021年2月版 kintone、@kintone/rest-api-client@1.10.0 で確認したものになります。
 </p>
 <p>
-    <br/>
+    <br>
 </p>
