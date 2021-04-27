@@ -55,934 +55,193 @@
     &nbsp;上述代码的URL在<a href="https://cybozudev.kf5.com/hc/kb/article/1412604">向JavaScript自定义中级开发者的目标前进（１） 〜webpack篇〜</a>到（４）中所提到的都是同一代码。<br>在之前的文章中已经试过的用户，为以防万一，可以在目录下再次执行 npm install。
 </p>
 <p>
-    細かい設定内容は後述しますが、これでTypeScriptを利用するための必要パッケージがインストールされます。
+    设置的细节之后会介绍，到此为止使用TypeScript所需要的包都安装完毕了。
 </p>
 <h2>
-    サンプル
+    范例
 </h2>
 <p>
-    第4回の記事、<a href="https://developer.cybozu.io/hc/ja/articles/900000566086">目指せ中級者！実践JavaScriptカスタマイズレベルアップ（４） 〜kintone REST API Client編〜</a>と同様のサンプルでTypeScriptならどう書くかという感じでコードを書いてみたいと思います。<br>第4回の記事と同様のアプリを利用するので上記記事の「アプリの用意と設定」のようにアプリを用意してから以下お試しください。
+    我们使用第4篇文章<a href="https://cybozudev.kf5.com/hc/kb/article/1465334">向JavaScript自定义中级开发者的目标前进（４）〜kintone REST API Client篇〜</a>中的范例，就如何用TypeScript改写来演示一下。<br>使用到的应用也是相同的，所以请大家按第4篇来配置好应用。
 </p>
 <h3>
-    型情報の取得
+    “类型”信息的获取
 </h3>
 <p>
-    コードを実際に編集する前に、JavaScript APIにアクセスするための型定義を用意します。&nbsp;<a href="https://github.com/kintone/js-sdk/tree/master/packages/dts-gen">@kintone/dts-gen</a>&nbsp;というライブラリを使うことで、JavaScriptAPIで扱うための型定義をアプリから取得できます。<br>下記コマンドを実行し、見積アプリから型情報を取得しておきます。作成されたものを型定義ファイルといいます。
+    在实际编写代码前，需要事先定义好应用中的字段类型。使用&nbsp;<a href="https://github.com/kintone/js-sdk/tree/master/packages/dts-gen">@kintone/dts-gen</a>&nbsp;这个库来获取应用字段的类型。<br>执行下列代码，获取报价单的字段类型。所生成的文件叫做类型定义文件。
 </p>
 <p>
-    型定義ファイルは、サンプルにすでにはいっていますが、下記のコードを実行することでお使いの環境のアプリの定義で上書きされます。
+    在此范例中，我们已经放置了类型定义文件。 通过执行下列代码，您环境中的应用的字段类型会覆盖类型定义文件。
 </p>
-<pre>npx @kintone/dts-gen --host https://kintoneのドメイン.cybozu.com/ -u ユーザー名 -p パスワード --app-id アプリID --type-name Quote --namespace KintoneTypes -o src/types/Quote.d.ts</pre>
+<pre class="brush:js;toolbar:false">npx @kintone/dts-gen --host https://kintone的域名.cybozu.cn/ -u 用户名 -p 密码 --app-id 应用ID --type-name Quote --namespace KintoneTypes -o src/types/Quote.d.ts</pre>
 <p>
-    &nbsp;Copyクリップボードにコピーしました
-</p>
-<p>
-    今回のサンプルコードのケースでは、見積アプリと商品アプリの2アプリを利用しますが、見積アプリのみJavaScriptAPIで値の書き換えを行うため、見積アプリの型定義ファイルを @kintone/dts-gen で生成します。商品アプリはREST APIで書き換えるため、別途サンプルコード内に型定義を行う必要があります。
+    这次的范例中，使用了报价单应用和商品应用，但只用JavaScriptAPI改写报价单应用的值、所以用 @kintone/dts-gen 只生成了报价单应用字段的类型定义文件。商品应用使用REST API来改写，所以需要另外在范例大妈中定义类型。
 </p>
 <p>
-    コマンドが成功すると、下記のような型定義ファイルが生成されます。
+    命令执行成功后，会生成像下面这样的文件
 </p>
 <p>
-    ファイル: src/types/Quote.d.ts
+    文件: src/types/Quote.d.ts
 </p>
-<p>
-    <br>
-</p>
-<table>
-    <tbody>
-        <tr class="firstRow">
-            <td></td>
-            <td>
-                declare namespace KintoneTypes {
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                interface Quote {
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                No: kintone.fieldTypes.SingleLineText;
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                文字列__1行_: kintone.fieldTypes.SingleLineText;
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                文字列__複数行_: kintone.fieldTypes.MultiLineText;
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                日付: kintone.fieldTypes.Date;
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                合計金額: kintone.fieldTypes.Calc;
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                見積明細: {
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                type: &quot;SUBTABLE&quot;;
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                value: {
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                id: string;
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                value: {
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                単価: kintone.fieldTypes.Number;
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                数量: kintone.fieldTypes.Number;
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                型番: kintone.fieldTypes.SingleLineText;
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                商品名: kintone.fieldTypes.SingleLineText;
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                小計: kintone.fieldTypes.Calc;
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                };
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                }[];
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                };
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                }
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                interface SavedQuote extends Quote {
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                $id: kintone.fieldTypes.Id;
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                $revision: kintone.fieldTypes.Revision;
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                更新者: kintone.fieldTypes.Modifier;
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                作成者: kintone.fieldTypes.Creator;
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                レコード番号: kintone.fieldTypes.RecordNumber;
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                更新日時: kintone.fieldTypes.UpdatedTime;
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                作成日時: kintone.fieldTypes.CreatedTime;
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                }
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                }
-            </td>
-        </tr>
-    </tbody>
-</table>
-<p>
-    &nbsp;Copyクリップボードにコピーしました
-</p>
-<p>
-    <br>
-</p>
+<pre class="brush:js;toolbar:false">
+declare namespace KintoneTypes {
+  interface Quote {
+    No: kintone.fieldTypes.SingleLineText;
+    文字列__1行_: kintone.fieldTypes.SingleLineText;
+    文字列__複数行_: kintone.fieldTypes.MultiLineText;
+    日付: kintone.fieldTypes.Date;
+    合計金額: kintone.fieldTypes.Calc;
+    見積明細: {
+      type: "SUBTABLE";
+      value: {
+        id: string;
+        value: {
+          単価: kintone.fieldTypes.Number;
+          数量: kintone.fieldTypes.Number;
+          型番: kintone.fieldTypes.SingleLineText;
+          商品名: kintone.fieldTypes.SingleLineText;
+          小計: kintone.fieldTypes.Calc;
+        };
+      }[];
+    };
+  }
+  interface SavedQuote extends Quote {
+    $id: kintone.fieldTypes.Id;
+    $revision: kintone.fieldTypes.Revision;
+    更新者: kintone.fieldTypes.Modifier;
+    作成者: kintone.fieldTypes.Creator;
+    レコード番号: kintone.fieldTypes.RecordNumber;
+    更新日時: kintone.fieldTypes.UpdatedTime;
+    作成日時: kintone.fieldTypes.CreatedTime;
+  }
+}
+</pre>
 <h3>
-    サンプルコード
+    范例代码
 </h3>
 <p>
-    ファイル: src/apps/quote_ts/index.ts
+    文件: src/apps/quote_ts/index.ts
 </p>
-<p>
-    <br>
-</p>
-<table>
-    <tbody>
-        <tr class="firstRow">
-            <td></td>
-            <td>
-                import {KintoneRestAPIClient, KintoneRecordField} from &#39;@kintone/rest-api-client&#39;;
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                // 製品アプリの型を定義
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                type SavedProduct = {
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                $id: KintoneRecordField.ID;
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                $revision: KintoneRecordField.Revision;
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                更新者: KintoneRecordField.Modifier;
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                作成者: KintoneRecordField.Creator;
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                レコード番号: KintoneRecordField.RecordNumber;
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                更新日時: KintoneRecordField.UpdatedTime;
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                作成日時: KintoneRecordField.CreatedTime;
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                ラジオボタン: KintoneRecordField.RadioButton;
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                文字列__複数行__0: KintoneRecordField.MultiLineText;
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                型番: KintoneRecordField.SingleLineText;
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                商品名: KintoneRecordField.SingleLineText;
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                数値: KintoneRecordField.Number;
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                在庫数: KintoneRecordField.Number;
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                }
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                // 商品アプリのアプリIDを入力してください
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                const productsAppId = 122;
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                const events = [&#39;app.record.create.submit&#39;, &#39;app.record.edit.submit&#39;];
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                kintone.events.on(events, async (event) =&gt; {
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                const record = event.record as KintoneTypes.Quote;
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                // kintoneへ接続するためのインスタンスを作成
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                const client = new KintoneRestAPIClient({});
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                // 今回はコード簡略化のために、テーブルの商品は重複禁止とします。
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                // ただの簡易的な重複チェックなので意味は理解しなくてOKです。
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                const hasDuplicatedRow = record.見積明細.value.some((rowA, indexA, arr) =&gt; {
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                return arr.find(
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                (rowB, indexB) =&gt;
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                indexA !== indexB &amp;&amp; rowA.value.型番.value === rowB.value.型番.value
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                );
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                });
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                if (hasDuplicatedRow) {
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                event.error = &#39;重複した商品は登録できません。&#39;;
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                return event;
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                }
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                // テーブルに入っている商品レコードを取得
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                let products;
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                try {
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                // Genericに型を指定することで, products変数を利用する際に型推論ができる
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                products = await client.record.getRecords&lt;SavedProduct&gt;({
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                app: productsAppId,
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                query: `型番 in (${record.見積明細.value
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                &nbsp; &nbsp; &nbsp; &nbsp;.map((row) =&gt; `&quot;${row.value.型番.value}&quot;`)
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                &nbsp; &nbsp; &nbsp; &nbsp;.join(&#39;, &#39;)})`,
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                });
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                } catch (error) {
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                event.error = &#39;レコードの取得に失敗しました&#39;;
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                return event;
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                }
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                // 商品リストの在庫数を差し引いたデータを作成
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                const deductedProductRecords = products.records.map((productRecord) =&gt; {
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                const tableRow = record.見積明細.value.find(
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                (row) =&gt; productRecord.型番.value === row.value.型番.value
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                );
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                // アップデートのキーとなる型番と, 差し引いた在庫数を格納する。
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                return {
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                型番: {
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                value: productRecord.型番.value,
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                },
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                在庫数: {
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                value:
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                Number(productRecord.在庫数.value) -
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                Number(tableRow?.value.数量.value),
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                },
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                };
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                });
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                // 在庫数を差し引いたあと在庫数が0未満になるようなレコードがないか確認
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                const noStockRecords = deductedProductRecords.filter(
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                (productRecord) =&gt; Number(productRecord.在庫数.value) &lt; 0
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                );
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                // 差し引き1未満のレコードがでた場合はエラーとみなしレコードの作成をストップさせる
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                if (noStockRecords.length &gt; 0) {
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                // event.errorにデータをいれたあとeventを返すとレコードの作成をストップできる
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                // どの商品が問題か示すために在庫が足りない商品の型番を列挙する
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                event.error = `在庫がない商品があります。型番 ${noStockRecords
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                &nbsp; &nbsp; &nbsp;.map((productRecord) =&gt; productRecord.型番.value)
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                &nbsp; &nbsp; &nbsp;.join(&#39;, &#39;)}`;
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                return event;
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                }
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                // 問題なければアップデート
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                try {
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                await client.record.updateRecords({
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                app: productsAppId,
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                records: deductedProductRecords.map((productRecord) =&gt; {
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                return {
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                updateKey: {
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                field: &#39;型番&#39;,
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                value: productRecord.型番.value,
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                },
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                record: {
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                在庫数: {
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                value: productRecord.在庫数.value,
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                },
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                },
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                };
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                }),
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                });
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                } catch (error) {
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                event.error = `アップデートに失敗しました。${error.message}`;
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                return event;
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                }
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                return event;
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                });
-            </td>
-        </tr>
-    </tbody>
-</table>
-<p>
-    &nbsp;Copyクリップボードにコピーしました
-</p>
-<p>
-    <br>
-</p>
+<pre class="brush:js;toolbar:false">
+
+import {KintoneRestAPIClient, KintoneRecordField} from '@kintone/rest-api-client';
+
+// 製品アプリの型を定義
+type SavedProduct = {
+  $id: KintoneRecordField.ID;
+  $revision: KintoneRecordField.Revision;
+  更新者: KintoneRecordField.Modifier;
+  作成者: KintoneRecordField.Creator;
+  レコード番号: KintoneRecordField.RecordNumber;
+  更新日時: KintoneRecordField.UpdatedTime;
+  作成日時: KintoneRecordField.CreatedTime;
+  ラジオボタン: KintoneRecordField.RadioButton;
+  文字列__複数行__0: KintoneRecordField.MultiLineText;
+  型番: KintoneRecordField.SingleLineText;
+  商品名: KintoneRecordField.SingleLineText;
+  数値: KintoneRecordField.Number;
+  在庫数: KintoneRecordField.Number;
+}
+
+// 商品アプリのアプリIDを入力してください
+const productsAppId = 122;
+
+const events = ['app.record.create.submit', 'app.record.edit.submit'];
+
+kintone.events.on(events, async (event) => {
+  const record = event.record as KintoneTypes.Quote;
+
+  // kintoneへ接続するためのインスタンスを作成
+  const client = new KintoneRestAPIClient({});
+
+  // 今回はコード簡略化のために、テーブルの商品は重複禁止とします。
+  // ただの簡易的な重複チェックなので意味は理解しなくてOKです。
+  const hasDuplicatedRow = record.見積明細.value.some((rowA, indexA, arr) => {
+    return arr.find(
+      (rowB, indexB) =>
+        indexA !== indexB && rowA.value.型番.value === rowB.value.型番.value
+    );
+  });
+  if (hasDuplicatedRow) {
+    event.error = '重複した商品は登録できません。';
+    return event;
+  }
+
+  // テーブルに入っている商品レコードを取得
+  let products;
+  try {
+    // Genericに型を指定することで, products変数を利用する際に型推論ができる
+    products = await client.record.getRecords<SavedProduct>({
+      app: productsAppId,
+      query: `型番 in (${record.見積明細.value
+        .map((row) => `"${row.value.型番.value}"`)
+        .join(', ')})`,
+    });
+  } catch (error) {
+    event.error = 'レコードの取得に失敗しました';
+    return event;
+  }
+
+  // 商品リストの在庫数を差し引いたデータを作成
+  const deductedProductRecords = products.records.map((productRecord) => {
+    const tableRow = record.見積明細.value.find(
+      (row) => productRecord.型番.value === row.value.型番.value
+    );
+
+    // アップデートのキーとなる型番と, 差し引いた在庫数を格納する。
+    return {
+      型番: {
+        value: productRecord.型番.value,
+      },
+      在庫数: {
+        value:
+          Number(productRecord.在庫数.value) -
+          Number(tableRow?.value.数量.value),
+      },
+    };
+  });
+
+  // 在庫数を差し引いたあと在庫数が0未満になるようなレコードがないか確認
+  const noStockRecords = deductedProductRecords.filter(
+    (productRecord) => Number(productRecord.在庫数.value) < 0
+  );
+
+  // 差し引き1未満のレコードがでた場合はエラーとみなしレコードの作成をストップさせる
+  if (noStockRecords.length > 0) {
+    // event.errorにデータをいれたあとeventを返すとレコードの作成をストップできる
+    // どの商品が問題か示すために在庫が足りない商品の型番を列挙する
+    event.error = `在庫がない商品があります。型番 ${noStockRecords
+      .map((productRecord) => productRecord.型番.value)
+      .join(', ')}`;
+
+    return event;
+  }
+
+  // 問題なければアップデート
+  try {
+    await client.record.updateRecords({
+      app: productsAppId,
+      records: deductedProductRecords.map((productRecord) => {
+        return {
+          updateKey: {
+            field: '型番',
+            value: productRecord.型番.value,
+          },
+          record: {
+            在庫数: {
+              value: productRecord.在庫数.value,
+            },
+          },
+        };
+      }),
+    });
+  } catch (error) {
+    event.error = `アップデートに失敗しました。${error.message}`;
+    return event;
+  }
+
+  return event;
+});
+</pre>
 <p>
     実際にコードを編集してみて、27行目あたりでrecordの中身をみようとするとどうなるか、Visual Studio Codeの挙動を試してみてください。
 </p>
