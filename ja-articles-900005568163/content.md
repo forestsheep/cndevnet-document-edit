@@ -243,82 +243,67 @@ kintone.events.on(events, async (event) => {
 });
 </pre>
 <p>
-    実際にコードを編集してみて、27行目あたりでrecordの中身をみようとするとどうなるか、Visual Studio Codeの挙動を試してみてください。
+    请实际编辑一下，尝试查看27行附近的record中的内容，然后看看Visual Studio Code会发生什么吧。
 </p>
 <p>
-    下記画像のように、「record.」と入力していくと見積アプリのフィールドに基づいたサジェストがされるはずです。
+    就像下方的图片那样，输入「record.」后，报价应用的字段就会出现在提示框中了。
 </p>
 <p>
     <img src="https://developer.cybozu.io/hc/article_attachments/900007244463/suggestion.gif" alt="suggestion.gif" style="border-width:1px;border-style:solid;border-color:rgb(221,221,221);max-width:800px;vertical-align:middle;height:auto;"/>
 </p>
 <h3>
-    サンプルコードの説明
+    范例代码的说明
 </h3>
 <p>
-    ここではTypeScriptのすべてを説明することはできませんが、サンプルコードの概要をかいつまんで紹介します。
+    由于篇幅关系不能表尽TypeScript，在此就范例代码大致要点做一些介绍。
 </p>
 <p>
-    実際には、第4回で紹介しているコードとはあまり差分はありません。下記に示す型情報の扱いのみ違いがあります。
+    其实，和第四篇所介绍的代码基本没有什么不同。如下所示，只有类型信息的处理上有所不同。
 </p>
 <ul class=" list-paddingleft-2">
     <li>
         <p>
-            26行目: event.recordの型情報を付与<br><img src="https://developer.cybozu.io/hc/article_attachments/900006342226/kintone-types-quote.png" alt="kintone-types-quote.png" style="border-width:1px;border-style:solid;border-color:rgb(221,221,221);max-width:800px;vertical-align:middle;height:auto;"/><br>
+            第26行: 申明event.record的类型信息<br><img src="https://developer.cybozu.io/hc/article_attachments/900006342226/kintone-types-quote.png" alt="kintone-types-quote.png" style="border-width:1px;border-style:solid;border-color:rgb(221,221,221);max-width:800px;vertical-align:middle;height:auto;"/><br>
         </p>
-        <pre>const record = event.record as kintoneTypes.Quote;</pre>
+        <pre class="brush:js;toolbar:false">const record = event.record as kintoneTypes.Quote;</pre>
         <p>
-            &nbsp;Copyクリップボードにコピーしました
-        </p>
-        <p>
-            とかかれた箇所ですが、これは先述の @kintone/dts-gen で作成した型定義を当てています。こうすることで、「event.record は 見積アプリのレコードですよ」ということを定義できます。<br>これを<a href="https://typescript-jp.gitbook.io/deep-dive/type-system/type-assertion">型アサーション</a>といいます。
+            这里指的是之前讲到的用 @kintone/dts-gen 所作成的类型。这么做可以定义「event.record 是报价应用的的记录哦」这件事。<br>这就是所谓的<a href="https://typescript-jp.gitbook.io/deep-dive/type-system/type-assertion">类型断言（日文）</a>
         </p>
     </li>
     <li>
         <p>
-            4行目〜18行目: 製品アプリの型定義（@kintone/rest-api-client用）<br><br>実は、<a href="https://github.com/kintone/js-sdk/tree/master/packages/rest-api-client">@kintone/rest-api-client</a>はTypeScriptをサポートしています。<br>ただし、@kintone/rest-api-clientの型定義は、@kintone/dts-genのようにコマンドから作成することができません。<br>そのため、このように製品アプリの型を自身で用意する必要があります。<br>@kintone/rest-api-clientの型定義方法の詳細は<a href="https://github.com/kintone/js-sdk/blob/master/packages/rest-api-client/docs/typescript.md">こちら</a>を御覧ください。
+            第4行〜第18行: 产品应用的类型定义（@kintone/rest-api-client）<br><br>实际上<a href="https://github.com/kintone/js-sdk/tree/master/packages/rest-api-client">@kintone/rest-api-client</a>是支持TypeScript的。<br>但是，@kintone/rest-api-client 的类型定义不是像 @kintone/dts-gen 一样是用命令行完成的。<br>所以，必须像这样准备好产品应用自身的类型。<br>@kintone/rest-api-client的类型定义的详细方法请参照<a href="https://github.com/kintone/js-sdk/blob/master/packages/rest-api-client/docs/typescript.md">这里</a>
         </p>
     </li>
     <li>
         <p>
-            48行目: @kintone/rest-api-clientに型情報を渡す<br><img src="https://developer.cybozu.io/hc/article_attachments/900007244643/types-definition.png" alt="types-definition.png" style="border-width:1px;border-style:solid;border-color:rgb(221,221,221);max-width:800px;vertical-align:middle;height:auto;"/><br>
+            第48行: 向 @kintone/rest-api-client 里传递类型信息<br><img src="https://developer.cybozu.io/hc/article_attachments/900007244643/types-definition.png" alt="types-definition.png" style="border-width:1px;border-style:solid;border-color:rgb(221,221,221);max-width:800px;vertical-align:middle;height:auto;"/><br>
         </p>
-        <pre>products = await client.record.getRecords&lt;SavedProduct&gt;({</pre>
+        <pre class="brush:js;toolbar:false">products = await client.record.getRecords&lt;SavedProduct&gt;({</pre>
         <p>
-            &nbsp;Copyクリップボードにコピーしました
-        </p>
-        <p>
-            としている行ですが、4行目~18行目で定義した製品アプリの型情報（SavedProduct）を渡すことで、getRecords()で返ってくるレコードは、SavedProduct型ですよと教えています。<br>これにより、REST APIから返却されたレコードについてもサジェストされるようになります。
+            这一行，通过把第4行~第18行所定义的产品应用的类型信息（SavedProduct）传递过去，告诉我们得到getRecords()所返回的记录是SavedProduct类型。<br>这样，REST API 所返回的记录就会得到提示框的支持了。
         </p>
     </li>
 </ul>
 <h3>
-    サンプルコードのビルド
+    范例代码的编译
 </h3>
 <p>
-    ブラウザにTypeScriptを直接動作させることはできませんが、TypeScript→JavaScriptに変換できるようにWebpackの設定を追記しています。<br>ビルドコマンドを打つことで、JavaScriptに変換できるので、それをアップロードします。
+    我们不能在浏览器里直接执行TypeScript，但可以通过webpack把TypeScript转换成JavaScript。<br>输入以下命令，转换完之后再上传。
 </p>
-<pre>npx webpack --mode production</pre>
+<pre class="brush:js;toolbar:false">npx webpack --mode production</pre>
 <p>
-    &nbsp;Copyクリップボードにコピーしました
-</p>
-<p>
-    詳細は、<a href="https://developer.cybozu.io/hc/ja/articles/900001933483">目指せ中級者！実践JavaScriptカスタマイズレベルアップ（３） 〜自動で一括ファイルアップロード編〜</a>をご確認ください。自動ファイルアップロードもできます。
+    详细信息请参照<a href="https://cybozudev.kf5.com/hc/kb/article/1426229">向JavaScript自定义中级开发者的目标前进（３） 〜自动批量上传文件篇〜</a>还具有自动上传功能。
 </p>
 <h2>
-    おわりに
+    结束语
 </h2>
 <p>
-    TypeScript自体と、それに対応するkintoneのエコシステムが醸成されてきた結果、このようにかなりよい開発体験を得ることができるようになってきました。<br>kintoneを扱う上で完全には避けられない、フィールドコードの勘違いなど、大分減らせることでバグも未然に防ぐことができ、かなりTypeScriptでkintoneをカスタマイズするのは大分魅力的だと思っています。
+    把 TypeScript 和 kintone 的生态环境相互酝酿结合，得到了相当不错的开发体验。<br>在处理 kintone 字段的过程中，不可避免地需要进行对照字段代码等繁琐又容易出错的工作。而使用 TypeScript 的特性，便可将此防范于未然，对于开发者来说是一大福音。
 </p>
 <p>
-    今回の記事でTypeScriptに興味がでたら、ぜひ入門者用の書籍などを参考にして学んでみてください。TypeScripは昨今ではかなり人気でもあり、今後の開発の役に立つと思います。
+    如果对本篇文章感兴趣的话，十分建议借此契机开始学习 TypeScript。TypeScript 如今备受瞩目，相信将来一定可以在开发中起到非常重要的作用。
 </p>
 <p>
-    シリーズの記事一覧は<a href="https://developer.cybozu.io/hc/ja/articles/900005565903">こちら</a>。
-</p>
-<p>
-    このTipsは、2021年2月版 kintone、@kintone/rest-api-client@1.10.0 で確認したものになります。
-</p>
-<p>
-    <br>
+    该Tips在 kintone 2021年2月版，@kintone/rest-api-client@1.10.0 中进行过确认。
 </p>
