@@ -1,5 +1,3 @@
-# Cybozu CDN 使用状况确认指南
-
 <h2>
     Index
 </h2>
@@ -95,12 +93,12 @@
     </li>
     <li>
         <p>
-            「Sources」标签的左侧树型结构中，找到像图中所展示的「js.cybozu.com」或「js.kintone.com」または「js.cybozu.cn」<br/><strong>如果没有，则表明该应用（如果是在kintone首页中确认，则表明全体自定义）没有用到 Cybozu CDN。</strong><br/>图1
+            「Sources」标签的左侧树型结构中，找到像图中所展示的「js.cybozu.com」或「js.kintone.com」または「js.cybozu.cn」<br/><strong>如果没有，则表明该应用（如果是在kintone首页中确认，则表明全体自定义）没有用到 Cybozu CDN。</strong><br/><img src="https://files.kf5.com/attachments/download/23361/12299109/0016139af55b61a8a31b4a2cf4ff7de/" alt="0016139af55b61a8a31b4a2cf4ff7de"/>
         </p>
     </li>
     <li>
         <p>
-            如果有的话，请单击「js.cybozu.com」或「js.kintone.com」或「js.cybozu.cn」左侧的[▶]记号。<br/>会显示出「｛Cybozu CDN 库名｝/｛版本｝」一览表<br/>※只显示「｛Cybozu CDN 库名｝」不显示版本的话，点击「｛Cybozu CDN 库名｝」左侧的[▶]记号，则可以看到版本号。<br/>图2
+            如果有的话，请单击「js.cybozu.com」或「js.kintone.com」或「js.cybozu.cn」左侧的[▶]记号。<br/>会显示出「｛Cybozu CDN 库名｝/｛版本｝」一览表<br/>※只显示「｛Cybozu CDN 库名｝」不显示版本的话，点击「｛Cybozu CDN 库名｝」左侧的[▶]记号，则可以看到版本号。<br/><img src="https://files.kf5.com/attachments/download/23361/12299114/0016139af5d81cf40a475fab3435040/" alt="0016139af5d81cf40a475fab3435040"/>
         </p>
     </li>
     <li>
@@ -112,12 +110,12 @@
 <ul class=" list-paddingleft-2" style="list-style-type: square;">
     <li>
         <p>
-            <strong>库名是「jqGrid」且版本在 4.7.1 以下</strong>
+            <strong>库名是「jqGrid」且版本在 4.7.1 以上</strong>
         </p>
     </li>
     <li>
         <p>
-            <strong>库名是「handsontable」且版本在 7.0.0 以下</strong>
+            <strong>库名是「handsontable」且版本在 7.0.0 以上</strong>
         </p>
     </li>
 </ul>
